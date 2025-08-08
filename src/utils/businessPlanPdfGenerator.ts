@@ -689,8 +689,20 @@ const generatePageCanvasForMultiPage = async (element: HTMLElement): Promise<HTM
          word-spacing: normal !important;
          font-variant-ligatures: none !important;
          font-variant-numeric: normal !important;
-         text-align: center !important;
          line-height: 1.2 !important;
+        }
+        /* Only center main page titles, not content within sections */
+        .page-title, .cover-title {
+          text-align: center !important;
+        }
+        /* Keep table of contents and other content left-aligned */
+        .table-of-contents, .table-of-contents * {
+          text-align: left !important;
+        }
+        /* Ensure list items in table of contents are properly aligned */
+        .table-of-contents ul, .table-of-contents li {
+          text-align: left !important;
+          list-style-position: inside !important;
         }
         .react-grid-item h1, .react-grid-item h2, .react-grid-item h3 {
           white-space: nowrap !important;
@@ -698,6 +710,7 @@ const generatePageCanvasForMultiPage = async (element: HTMLElement): Promise<HTM
           text-overflow: clip !important;
          width: auto !important;
          min-width: max-content !important;
+          text-align: left !important;
         }
       `;
       
@@ -780,10 +793,16 @@ const generatePageCanvasForMultiPage = async (element: HTMLElement): Promise<HTM
              el.style.wordSpacing = 'normal';
              el.style.fontVariantLigatures = 'none';
              el.style.fontVariantNumeric = 'normal';
-             el.style.textAlign = 'center';
              el.style.lineHeight = '1.2';
              el.style.width = 'auto';
              el.style.minWidth = 'max-content';
+              
+              // Only center specific title elements, not all headings
+              if (el.classList.contains('page-title') || el.classList.contains('cover-title')) {
+                el.style.textAlign = 'center';
+              } else {
+                el.style.textAlign = 'left';
+              }
             }
           });
           
