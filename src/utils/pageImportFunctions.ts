@@ -172,7 +172,9 @@ export const importOrganizationManagementData = async (data: PageImportData) => 
     organizationalStructure: apiData?.organizationalStructure || data.organizationalStructure || '',
     advisoryBoard: apiData?.advisoryBoard || data.advisoryBoard || '',
     keyPersonnel: apiData?.keyPersonnel || data.keyPersonnel || '',
-    // Dynamic stakeholder data
+    // Dynamic team members data
+    teamMembers: apiData?.team_members || apiData?.teamMembers || (data.teamMembers ? JSON.parse(data.teamMembers) : []) as TeamMember[],
+    // Legacy stakeholder data for backward compatibility
     stakeholders: apiData?.stakeholders || (data.stakeholders ? JSON.parse(data.stakeholders) : []) as Stakeholder[]
   };
 };
