@@ -45,20 +45,6 @@ export interface BusinessPlanTheme {
   };
 }
 
-export interface TeamMember {
-  id: string;
-  firstName: string;
-  lastName: string;
-  title: string;
-  qualification: string;
-  role: string;
-  ownershipPercentage: number;
-  email: string;
-  linkedin: string;
-  bio: string;
-  imageUrl?: string;
-}
-
 // Fixed structure for each page
 export interface CoverPageData {
   companyName: string;

@@ -1,21 +1,10 @@
 import React, { forwardRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { BusinessPlanSection, BusinessPlanTheme } from '../types/businessPlan';
-import { 
-  Building2, 
-  Users, 
-  Target, 
-  TrendingUp, 
-  DollarSign, 
-  FileText, 
-  Shield, 
-  Heart, 
-  Gift,
-  Mail,
-  Linkedin,
-  User,
-  Award,
-  Briefcase
-} from 'lucide-react';
+import { Building, Building2, TrendingUp, Users, Target, DollarSign, BarChart3, Lightbulb, FileText, Calendar, Award, Zap, Globe, Shield, Rocket, Star, Heart, List, ArrowRight } from 'lucide-react';
+import { StatsCard, MarketSegment, Stakeholder, ProductFeature, MarketingChannel, FinancialMetric, FundingAllocation, getPageKeys } from '../utils/pageImportFunctions';
 
 interface BusinessPlanPageProps {
   section: BusinessPlanSection;
@@ -26,980 +15,1033 @@ interface BusinessPlanPageProps {
 
 export const BusinessPlanPage = forwardRef<HTMLDivElement, BusinessPlanPageProps>(
   ({ section, theme, pageNumber, totalPages }, ref) => {
-    const renderPageContent = () => {
-      switch (section.id) {
-        case 'cover-page':
-          return renderCoverPage();
-        case 'table-of-contents':
-          return renderTableOfContents();
-        case 'company-description':
-          return renderCompanyDescription();
-        case 'market-analysis':
-          return renderMarketAnalysis();
-        case 'organization-management':
-          return renderOrganizationManagement();
-        case 'service-product-line':
-          return renderProductService();
-        case 'marketing-sales':
-          return renderMarketingSales();
-        case 'financial-projections':
-          return renderFinancialProjections();
-        case 'funding-request':
-          return renderFundingRequest();
-        case 'appendix':
-          return renderAppendix();
-        case 'appendix-government-policy':
-          return renderGovernmentPolicy();
-        case 'appendix-ngo-landscape':
-          return renderNGOLandscape();
-        case 'appendix-grants':
-          return renderGrants();
-        default:
-          return <div>Page content not found</div>;
-      }
+    
+    const getPageIcon = (pageNumber: number) => {
+      const icons = [
+        Building2,    // 1 - Cover
+        List,         // 2 - Table of Contents
+        Building,     // 3 - Company Description
+        TrendingUp,   // 4 - Market Analysis
+        Users,        // 5 - Organization
+        Lightbulb,    // 6 - Products/Services
+        Target,       // 7 - Marketing
+        DollarSign,   // 8 - Financial
+        DollarSign,   // 9 - Funding
+        FileText,     // 10 - Appendix
+        Award,        // 11 - Government Policy
+        Users,        // 12 - NGO Landscape
+        DollarSign    // 13 - Grants
+      ];
+    
+      const whitePages = [1, 2, 5, 7, 8, 9]; 
+    
+      const IconComponent = icons[pageNumber - 1] || FileText;
+      const colorClass = whitePages.includes(pageNumber) ? 'text-white' : 'text-blue-600';
+    
+      return <IconComponent size={24} className={colorClass} />;
     };
 
     const renderCoverPage = () => (
-      <div className="h-full flex flex-col justify-center items-center text-center p-8 bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="mb-8">
-          <Building2 size={64} className="text-blue-600 mx-auto mb-4" />
+      <div 
+        className="relative overflow-hidden"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        }}
+      >
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-16 left-12 w-16 h-16 bg-white/10 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-24 right-16 w-12 h-12 bg-white/15 rounded-full"></div>
+          <div className="absolute top-1/2 left-1/3 w-10 h-10 bg-white/20 rounded-full"></div>
+          <div className="absolute top-1/4 right-1/4 w-6 h-6 bg-white/10 rounded-full"></div>
+          
+          {/* Geometric shapes */}
+          <div className="absolute top-32 right-24 w-10 h-10 border-2 border-white/20 rotate-45"></div>
+          <div className="absolute bottom-32 left-20 w-8 h-8 border-2 border-white/15 rotate-12"></div>
         </div>
         
-        <h1 className="text-4xl font-bold text-gray-900 mb-4 cover-title">
-          {section.content?.companyName || 'Your Company Name'}
-        </h1>
-        
-        <h2 className="text-2xl text-gray-600 mb-8">
-          {section.content?.subtitle || 'Business Plan'}
-        </h2>
-        
-        <div className="text-lg text-gray-700 space-y-2">
-          <p><strong>Year:</strong> {section.content?.year || new Date().getFullYear()}</p>
-          <p><strong>Prepared by:</strong> {section.content?.preparedBy || 'Business Team'}</p>
-        </div>
-
-        {section.content?.statsCards && section.content.statsCards.length > 0 && (
-          <div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-md">
-            {section.content.statsCards.map((card: any, index: number) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow-md text-center">
-                <div className="text-2xl font-bold text-blue-600">{card.value}</div>
-                <div className="text-sm text-gray-600">{card.label}</div>
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-8 py-12">
+          {/* Logo Section */}
+          <div className="mb-8">
+            <div className="relative">
+              <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center mb-4 mx-auto shadow-2xl border border-white/30">
+                <Building2 size={24} className="text-white" />
               </div>
-            ))}
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
+                <Star size={10} className="text-white" />
+              </div>
+            </div>
           </div>
-        )}
+          
+          {/* Title Section */}
+          <div className="mb-8">
+            <h1 className="text-2xl font-black text-white mb-3 leading-tight tracking-tight">
+              {section.content.companyName || 'Your Company Name'}
+            </h1>
+            
+            <div className="flex items-center justify-center mb-4">
+              <div className="h-1 w-8 bg-white/40 rounded-full"></div>
+              <div className="h-1.5 w-4 bg-white rounded-full mx-2"></div>
+              <div className="h-1 w-8 bg-white/40 rounded-full"></div>
+            </div>
+            
+            <h2 className="text-lg font-bold text-white/90 mb-2">{section.content.subtitle || 'Business Plan'}</h2>
+            <p className="text-sm text-white/70">Strategic Vision & Growth Roadmap</p>
+          </div>
+          
+          {/* Info Card */}
+          <div className="bg-white/10 backdrop-blur-md rounded-lg p-3 shadow-2xl border border-white/20 max-w-xs">
+            <div className="flex items-center justify-center mb-3">
+              <Heart size={12} className="text-red-400 mr-2" />
+              <span className="text-white font-semibold text-xs">Prepared with passion by:</span>
+            </div>
+            <p className="text-sm font-bold text-white mb-2">
+              {section.content.preparedBy || '[Your Name]'}
+            </p>
+            <div className="flex items-center justify-center space-x-2 text-white/80">
+              <Calendar size={12} />
+              <p className="text-xs">{section.content.year || new Date().getFullYear()}</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
 
+    const tableOfContents = [
+      { title: 'Company Description', description: 'Foundation & Vision', page: 3, icon: Building },
+      { title: 'Market Analysis', description: 'Market Opportunity & Competitive Landscape', page: 4, icon: TrendingUp },
+      { title: 'Organization and Management', description: 'Leadership Team & Organizational Structure', page: 5, icon: Users },
+      { title: 'Service or Product Line', description: 'Innovation Meets Excellence', page: 6, icon: Lightbulb },
+      { title: 'Marketing & Sales Strategy', description: 'Customer Acquisition & Growth Strategy', page: 7, icon: Target },
+      { title: 'Financial Projections', description: '5-Year Financial Roadmap', page: 8, icon: BarChart3 },
+      { title: 'Funding Request', description: 'Investment Opportunity & Capital Requirements', page: 9, icon: DollarSign },
+      { title: 'Appendix', description: 'Supporting Documents & Additional Information', page: 10, icon: FileText },
+      { title: 'Government Policy', description: 'Regulatory Environment & Compliance', page: 11, icon: Award },
+      { title: 'NGO Landscape', description: 'Partnership Opportunities & Resources', page: 12, icon: Users },
+      { title: 'Grants & Funding', description: 'Available Grants & Application Strategy', page: 13, icon: DollarSign }
+    ];
+
     const renderTableOfContents = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <FileText size={48} className="text-blue-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Table of Contents</h1>
-          <p className="text-gray-600 mt-2">Navigate Your Business Journey</p>
+      <div 
+        className="relative overflow-hidden"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)'
+        }}
+      >
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-16 left-12 w-12 h-12 bg-white/10 rounded-xl rotate-12"></div>
+          <div className="absolute bottom-24 right-16 w-16 h-16 bg-white/5 rounded-full"></div>
+          <div className="absolute top-1/2 left-1/4 w-10 h-10 bg-white/15 rounded-lg rotate-45"></div>
+          <div className="absolute top-1/4 right-1/3 w-12 h-12 border-2 border-white/20 rounded-full"></div>
+          
+          {/* Page indicators floating */}
+          <div className="absolute top-12 right-12 flex space-x-1">
+            {[1,2,3].map(i => (
+              <div key={i} className="w-2 h-3 bg-white/20 rounded-sm"></div>
+            ))}
+          </div>
         </div>
-
-        <div className="table-of-contents space-y-4">
-          <div className="flex justify-between items-center p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-            <div className="flex items-center space-x-3">
-              <Building2 size={20} className="text-blue-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Company Description</div>
-                <div className="text-sm text-gray-600">Foundation & Vision</div>
-              </div>
+        
+        <div className="relative z-10 flex flex-col h-full px-6 py-6">
+          {/* Header Section */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-3 bg-white/20 backdrop-blur-md px-6 py-2 rounded-xl mb-2 shadow-2xl border border-white/30">
+              <List size={20} className="text-white" />
+              <h1 className="text-lg font-black text-white">Table of Contents</h1>
             </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-blue-600">3</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
+            <p className="text-xs text-white/80">Navigate Your Business Journey</p>
           </div>
-
-          <div className="flex justify-between items-center p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-            <div className="flex items-center space-x-3">
-              <Target size={20} className="text-purple-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Market Analysis</div>
-                <div className="text-sm text-gray-600">Market Opportunity & Competitive Landscape</div>
-              </div>
+          
+          {/* Contents Grid */}
+          <div className="flex-1 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-2xl border border-white/30 min-h-0">
+            <div className="grid grid-cols-1 gap-1 h-full overflow-y-auto">
+              {tableOfContents.map((item, index) => (
+                <div 
+                  key={index}
+                  className="group flex items-center justify-between bg-gradient-to-r from-white to-gray-50 rounded-md p-1 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.01] border border-gray-100"
+                >
+                  <div className="flex items-center space-x-2 flex-1">
+                    <div className="p-1.5 bg-gradient-to-br from-purple-500 to-blue-500 rounded-md shadow-sm group-hover:shadow-md transition-all">
+                      <item.icon size={12} className="text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xs font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 mt-0.5 leading-tight">{item.description}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <div className="text-right">
+                      <div className="text-sm font-black text-purple-600">{item.page}</div>
+                      <div className="text-xs text-gray-500 uppercase font-medium">Page</div>
+                    </div>
+                    <ArrowRight size={12} className="text-gray-400 group-hover:text-purple-600 transition-colors" />
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-purple-600">4</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-            <div className="flex items-center space-x-3">
-              <Users size={20} className="text-green-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Organization and Management</div>
-                <div className="text-sm text-gray-600">Leadership Team & Organizational Structure</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-green-600">5</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-indigo-50 rounded-lg border-l-4 border-indigo-500">
-            <div className="flex items-center space-x-3">
-              <Briefcase size={20} className="text-indigo-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Service or Product Line</div>
-                <div className="text-sm text-gray-600">Innovation Meets Excellence</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-indigo-600">6</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-pink-50 rounded-lg border-l-4 border-pink-500">
-            <div className="flex items-center space-x-3">
-              <TrendingUp size={20} className="text-pink-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Marketing & Sales Strategy</div>
-                <div className="text-sm text-gray-600">Customer Acquisition & Growth Strategy</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-pink-600">7</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
-            <div className="flex items-center space-x-3">
-              <DollarSign size={20} className="text-yellow-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Financial Projections</div>
-                <div className="text-sm text-gray-600">5-Year Financial Roadmap</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-yellow-600">8</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
-            <div className="flex items-center space-x-3">
-              <DollarSign size={20} className="text-red-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Funding Request</div>
-                <div className="text-sm text-gray-600">Investment Opportunity & Capital Requirements</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-red-600">9</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border-l-4 border-gray-500">
-            <div className="flex items-center space-x-3">
-              <FileText size={20} className="text-gray-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Appendix</div>
-                <div className="text-sm text-gray-600">Supporting Documents & Additional Information</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-gray-600">10</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-            <div className="flex items-center space-x-3">
-              <Shield size={20} className="text-blue-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Government Policy</div>
-                <div className="text-sm text-gray-600">Regulatory Environment & Compliance</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-blue-600">11</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-            <div className="flex items-center space-x-3">
-              <Heart size={20} className="text-green-600" />
-              <div>
-                <div className="font-semibold text-gray-900">NGO Landscape</div>
-                <div className="text-sm text-gray-600">Partnership Opportunities & Resources</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-green-600">12</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-            <div className="flex items-center space-x-3">
-              <Gift size={20} className="text-purple-600" />
-              <div>
-                <div className="font-semibold text-gray-900">Grants & Funding</div>
-                <div className="text-sm text-gray-600">Available Grants & Application Strategy</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-purple-600">13</div>
-              <div className="text-xs text-gray-500">PAGE</div>
-            </div>
+            
+            {/* Footer note */}
+            
           </div>
         </div>
       </div>
     );
 
     const renderCompanyDescription = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <Building2 size={48} className="text-blue-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Company Description</h1>
-          <p className="text-gray-600 mt-2">Foundation & Vision</p>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Legal Structure</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.legalStructure || 'Our company operates as a [legal structure] established to provide innovative solutions in our target market. We maintain full compliance with all regulatory requirements and industry standards.'}
-            </p>
-          </div>
-
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Company History</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.companyHistory || 'Founded with a vision to transform the industry, our company has grown from a startup concept to a market-ready organization. Our journey reflects our commitment to innovation and excellence.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Industry Focus</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.industry || 'We operate in a dynamic industry with significant growth potential. Our focus on emerging trends and customer needs positions us for sustainable success.'}
-            </p>
-          </div>
-
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Vision Statement</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.visionStatement || 'To become the leading provider of innovative solutions that transform how businesses operate and deliver value to their customers.'}
-            </p>
-          </div>
-
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Unique Value Proposition</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.uniqueValueProposition || 'Our unique combination of expertise, technology, and customer focus creates unmatched value for our clients and stakeholders.'}
-            </p>
-          </div>
-        </div>
-
-        {section.content?.statsCards && section.content.statsCards.length > 0 && (
-          <div className="mt-8 grid grid-cols-2 gap-4">
-            {section.content.statsCards.map((card: any, index: number) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow-md text-center border">
-                <div className="text-2xl font-bold text-blue-600">{card.value}</div>
-                <div className="text-sm text-gray-600">{card.label}</div>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(to bottom right, #f8fafc, #e2e8f0)'
+        }}
+      >
+        {/* Header with floating elements */}
+        <div className="relative mb-4">
+          <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-b-xl shadow-lg"></div>
+          <div className="relative pt-2 pb-1.5 px-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="p-1.5 bg-white rounded-md shadow-lg">
+                  {getPageIcon(pageNumber)}
+                </div>
+                <div>
+                  <h1 className="text-lg font-black text-white">{section.title}</h1>
+                  <p className="text-purple-100 mt-0.5 text-xs">Foundation & Vision</p>
+                </div>
               </div>
-            ))}
+              <div className="text-right text-white">
+                <div className="text-xs font-bold">EST.</div>
+                <div className="text-sm font-black">2024</div>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
+
+        <div className="px-4 space-y-1.5 flex flex-col mt-3" style={{ height: 'calc(100% - 80px)' }}>
+          {/* Company Stats Cards */}
+          {section.content.statsCards && section.content.statsCards.length > 0 && (
+            <div className="grid grid-cols-4 gap-1 mb-1.5 flex-shrink-0">
+              {section.content.statsCards.map((card: StatsCard, index: number) => {
+                const borderColors = {
+                  purple: 'border-purple-500',
+                  blue: 'border-blue-500',
+                  green: 'border-green-500',
+                  orange: 'border-orange-500',
+                  red: 'border-red-500',
+                  yellow: 'border-yellow-500'
+                };
+                const textColors = {
+                  purple: 'text-purple-600',
+                  blue: 'text-blue-600',
+                  green: 'text-green-600',
+                  orange: 'text-orange-600',
+                  red: 'text-red-600',
+                  yellow: 'text-yellow-600'
+                };
+                return (
+                  <div key={index} className={`bg-white rounded-md p-1.5 shadow-sm border-l-2 ${borderColors[card.color as keyof typeof borderColors] || 'border-gray-500'} hover:shadow-md transition-shadow`}>
+                    <div className="text-center">
+                      <div className={`text-sm font-black ${textColors[card.color as keyof typeof textColors] || 'text-gray-600'}`}>{card.value}</div>
+                      <div className="text-xs text-gray-600 font-medium">{card.label}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Content with modern card design */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 flex-1 shadow-md min-h-0 flex flex-col">
+             <div className="flex items-center mb-3 flex-shrink-0">
+               <Globe size={14} className="text-purple-600 mr-2" />
+               <h3 className="text-sm font-bold text-gray-800">Market Intelligence</h3>
+             </div>
+             <div className="flex-1 overflow-y-auto min-h-0">
+               {renderContent()}
+             </div>
+           </div>
+        </div>
       </div>
     );
 
     const renderMarketAnalysis = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <Target size={48} className="text-purple-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Market Analysis</h1>
-          <p className="text-gray-600 mt-2">Market Opportunity & Competitive Landscape</p>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)'
+        }}
+      >
+        {/* Floating geometric shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-12 right-16 w-12 h-12 border-2 border-white/20 rounded-full"></div>
+          <div className="absolute bottom-24 left-12 w-16 h-16 bg-white/10 rounded-lg rotate-12"></div>
+          <div className="absolute top-1/2 right-1/3 w-10 h-10 bg-white/15 rounded-full"></div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Industry Analysis</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.industryAnalysis || 'The industry shows strong growth potential with emerging opportunities driven by technological advancement and changing consumer preferences.'}
-            </p>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Target Market</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.targetMarket || 'Our target market consists of forward-thinking businesses and consumers who value innovation and quality solutions.'}
-            </p>
-          </div>
-
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Market Size</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.marketSize || 'The addressable market represents a significant opportunity with projected growth rates exceeding industry averages.'}
-            </p>
-          </div>
-
-          <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Competitive Analysis</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.competitorAnalysis || 'Our competitive landscape analysis reveals opportunities for differentiation and market positioning.'}
-            </p>
-          </div>
-
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Competitive Advantage</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.competitiveAdvantage || 'Our competitive advantages include proprietary technology, experienced team, and strong customer relationships.'}
-            </p>
-          </div>
-        </div>
-
-        {section.content?.marketSegments && section.content.marketSegments.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Market Segments</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {section.content.marketSegments.map((segment: any, index: number) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-md border">
-                  <div className="text-lg font-bold" style={{ color: segment.color }}>{segment.name}</div>
-                  <div className="text-2xl font-bold text-gray-900">{segment.value}</div>
-                  <div className="text-sm text-gray-600">{segment.percentage}</div>
-                </div>
-              ))}
+        <div className="relative z-10 p-5 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-3 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full mb-2 shadow-lg border border-white/30">
+              {React.cloneElement(getPageIcon(pageNumber), { className: "text-white", size: 20 })}
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
             </div>
+            <p className="text-white/80 text-xs">Market Opportunity & Competitive Landscape</p>
           </div>
-        )}
+
+          {/* Market Size Visualization */}
+          {(section.content.totalMarket || section.content.marketSegments) && (
+            <div className="bg-white/10 backdrop-blur-md rounded-lg p-2 mb-2 border border-white/20 flex-shrink-0">
+              {section.content.totalMarket && (
+                <div className="text-center mb-2">
+                  <h3 className="text-sm font-bold text-white mb-1">Total Addressable Market</h3>
+                  <div className="text-xl font-black text-white">{section.content.totalMarket}</div>
+                  {section.content.marketGrowth && (
+                    <p className="text-white/70 text-xs">Growing at {section.content.marketGrowth}</p>
+                  )}
+                </div>
+              )}
+              
+              {/* Market segments with progress bars */}
+              {section.content.marketSegments && section.content.marketSegments.length > 0 && (
+                <div className="grid grid-cols-2 gap-1.5">
+                  {section.content.marketSegments.map((segment: MarketSegment, index: number) => (
+                    <div key={index} className="bg-white/20 rounded-md p-1.5">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-white font-semibold text-xs">{segment.name}</span>
+                        <span className="text-white/80 text-xs">{segment.value}</span>
+                      </div>
+                      <div className="w-full bg-white/20 rounded-full h-1">
+                        <div className={`bg-gradient-to-r ${segment.color} h-1 rounded-full`} style={{width: segment.percentage}}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 flex-1 shadow-md min-h-0 flex flex-col">
+             <div className="flex items-center mb-3 flex-shrink-0">
+               <Globe size={14} className="text-purple-600 mr-2" />
+               <h3 className="text-sm font-bold text-gray-800">Market Intelligence</h3>
+             </div>
+             <div className="flex-1 overflow-y-auto min-h-0">
+               {renderContent()}
+             </div>
+          </div>
+        </div>
       </div>
     );
 
-    const renderOrganizationManagement = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <Users size={48} className="text-green-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Organization and Management</h1>
-          <p className="text-gray-600 mt-2">Leadership Team & Organizational Structure</p>
+    const renderOrganization = () => (
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%)'
+        }}
+      >
+        {/* Background pattern */}
+        <div className="absolute inset-0">
+          <div className="absolute top-12 left-12 w-14 h-14 bg-white/10 rounded-full"></div>
+          <div className="absolute bottom-20 right-16 w-20 h-20 bg-white/5 rounded-xl rotate-45"></div>
+          <div className="absolute top-1/3 right-1/4 w-12 h-12 bg-white/15 rounded-full"></div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Stakeholder Information</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.stakeholderInfo || 'Our stakeholder ecosystem includes investors, advisors, customers, and strategic partners who contribute to our success.'}
-            </p>
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 rounded-full mb-3 shadow-xl">
+              {React.cloneElement(getPageIcon(pageNumber), { className: "text-white", size: 24 })}
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
+            </div>
+            <p className="text-gray-700 text-sm font-medium">Leadership Team & Organizational Structure</p>
           </div>
 
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Leadership Team</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.leadershipTeam || 'Our leadership team combines decades of industry experience with fresh perspectives and innovative thinking.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Organizational Structure</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.organizationalStructure || 'Our flat organizational structure promotes collaboration, quick decision-making, and efficient communication.'}
-            </p>
-          </div>
-
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Advisory Board</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.advisoryBoard || 'Our advisory board provides strategic guidance and industry expertise to support our growth objectives.'}
-            </p>
-          </div>
-
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Key Personnel</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.keyPersonnel || 'Our key personnel bring specialized skills and experience essential for executing our business strategy.'}
-            </p>
-          </div>
-        </div>
-
-        {/* Team Members Section */}
-        {section.content?.teamMembers && section.content.teamMembers.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Team Members</h3>
-            <div className="grid grid-cols-1 gap-4">
-              {section.content.teamMembers.map((member: any, index: number) => (
-                <div key={member.id || index} className="bg-white p-6 rounded-lg shadow-md border flex items-start space-x-4">
-                  {/* Profile Image */}
-                  <div className="flex-shrink-0">
-                    {member.imageUrl ? (
-                      <img 
-                        src={member.imageUrl} 
-                        alt={`${member.firstName} ${member.lastName}`}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
-                        onError={(e) => {
-                          // Fallback to default avatar if image fails to load
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          target.nextElementSibling?.classList.remove('hidden');
-                        }}
-                      />
-                    ) : null}
-                    <div className={`w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl ${member.imageUrl ? 'hidden' : ''}`}>
-                      {member.firstName?.charAt(0)}{member.lastName?.charAt(0)}
-                    </div>
-                  </div>
-                  
-                  {/* Member Details */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
+          {/* Team showcase */}
+          <div className="bg-white/80 backdrop-blur-md rounded-xl p-4 flex-1 shadow-xl border border-white/50 min-h-0">
+            <h3 className="text-base font-bold text-center text-gray-800 mb-3">Meet Our Stakeholders</h3>
+            
+            {section.content.stakeholders && section.content.stakeholders.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 mb-3 flex-1">
+                {section.content.stakeholders.map((stakeholder: Stakeholder) => (
+                  <div key={stakeholder.id} className="bg-gradient-to-br from-white to-gray-50 rounded-lg p-3 shadow-md hover:shadow-lg transition-all hover:scale-102 border border-gray-100">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className="relative">
+                        <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center shadow-md">
+                          <span className="text-white font-black text-sm">{stakeholder.id}</span>
+                        </div>
+                        <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border border-white"></div>
+                      </div>
                       <div>
-                        <h4 className="text-lg font-bold text-gray-900">
-                          {member.firstName} {member.lastName}
-                        </h4>
-                        <p className="text-blue-600 font-semibold">{member.title}</p>
-                        <p className="text-sm text-gray-600 mb-2">{member.qualification}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-green-600">{member.ownershipPercentage}%</div>
-                        <div className="text-xs text-gray-500">OWNERSHIP</div>
+                        <div className="font-black text-gray-800 text-sm">{stakeholder.name}</div>
+                        <div className="text-orange-600 font-semibold text-xs">{stakeholder.role}</div>
                       </div>
                     </div>
                     
-                    <p className="text-gray-700 text-sm mb-3 leading-relaxed">
-                      {member.bio || 'Experienced professional contributing to our team\'s success.'}
-                    </p>
-                    
-                    <div className="flex items-center space-x-4 text-sm">
-                      <div className="flex items-center space-x-1 text-gray-600">
-                        <Briefcase size={14} />
-                        <span className="capitalize">{member.role}</span>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600">Stake:</span>
+                        <span className="font-bold text-orange-600">{stakeholder.stake}</span>
                       </div>
-                      
-                      {member.email && (
-                        <div className="flex items-center space-x-1 text-blue-600">
-                          <Mail size={14} />
-                          <span className="truncate max-w-32">{member.email}</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600">Experience:</span>
+                        <span className="font-bold text-gray-800">{stakeholder.experience}</span>
+                      </div>
+                      <div className="pt-0.5 border-t border-gray-200">
+                        <div className="text-xs text-gray-500 truncate flex items-center gap-1">
+                          <FontAwesomeIcon icon={faEnvelope} className="w-3.5 h-3.5" />
+                          <span>{stakeholder.email}</span>
                         </div>
-                      )}
-                      
-                      {member.linkedin && (
-                        <div className="flex items-center space-x-1 text-blue-700">
-                          <Linkedin size={14} />
-                          <span>LinkedIn</span>
+                        <div className="text-xs text-gray-500 truncate flex items-center gap-1">
+                          <FontAwesomeIcon icon={faLinkedin} className="w-3.5 h-3.5" />
+                          <span>{stakeholder.linkedin}</span>
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
+            
+            {(!section.content.stakeholders || section.content.stakeholders.length === 0) && (
+              <div className="text-center">
+                <p className="text-xs text-gray-600 bg-orange-50 rounded-lg p-3 border border-orange-200">
+                  💡 <strong>Note:</strong> No stakeholder data available. Please provide stakeholder information in the backend data.
+                </p>
+              </div>
+            )}
           </div>
-        )}
-
-        {/* Legacy Stakeholders Section for backward compatibility */}
-        {section.content?.stakeholders && section.content.stakeholders.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Stakeholders</h3>
-            <div className="grid grid-cols-1 gap-4">
-              {section.content.stakeholders.map((stakeholder: any, index: number) => (
-                <div key={stakeholder.id || index} className="bg-white p-4 rounded-lg shadow-md border">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-lg font-bold text-gray-900">{stakeholder.name}</h4>
-                    <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">{stakeholder.role}</span>
-                  </div>
-                  <p className="text-gray-700 text-sm mb-2">{stakeholder.experience}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span>Stake: {stakeholder.stake}</span>
-                    <div className="flex space-x-2">
-                      {stakeholder.email && <Mail size={14} />}
-                      {stakeholder.linkedin && <Linkedin size={14} />}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     );
 
     const renderProductService = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <Briefcase size={48} className="text-indigo-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Service or Product Line</h1>
-          <p className="text-gray-600 mt-2">Innovation Meets Excellence</p>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        }}
+      >
+        {/* Tech-inspired background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-16 h-16 border-2 border-white/20 rounded-lg rotate-12"></div>
+          <div className="absolute bottom-32 right-24 w-20 h-20 bg-white/10 rounded-full"></div>
+          <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-white/15 rounded-xl rotate-45"></div>
+          
+          {/* Circuit-like lines */}
+          <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Product Description</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.productDescription || 'Our innovative products and services are designed to meet the evolving needs of our target market with superior quality and value.'}
-            </p>
-          </div>
-
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Benefits to Customers</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.benefitsToCustomers || 'Our solutions provide measurable benefits including cost savings, improved efficiency, and enhanced user experience.'}
-            </p>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Development Stage</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.developmentStage || 'Our products are in advanced development stages with proven market validation and customer feedback integration.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Intellectual Property</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.intellectualProperty || 'We maintain a strong intellectual property portfolio including patents, trademarks, and proprietary technologies.'}
-            </p>
-          </div>
-
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Future Products</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.futureProducts || 'Our product roadmap includes exciting innovations that will expand our market reach and customer value proposition.'}
-            </p>
-          </div>
-        </div>
-
-        {section.content?.productFeatures && section.content.productFeatures.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Features</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {section.content.productFeatures.map((feature: any, index: number) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-md border">
-                  <div className="text-lg font-bold text-gray-900">{feature.name}</div>
-                  <p className="text-sm text-gray-600 mb-2">{feature.description}</p>
-                  <div className="text-lg font-bold" style={{ color: feature.color }}>{feature.percentage}</div>
-                </div>
-              ))}
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/30">
+              <Lightbulb size={24} className="text-yellow-300" />
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
             </div>
+            <p className="text-white/80 text-sm">Innovation Meets Excellence</p>
           </div>
-        )}
+
+          {/* Product showcase */}
+          {section.content.productFeatures && section.content.productFeatures.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 mb-3 flex-shrink-0">
+              {section.content.productFeatures.map((feature: ProductFeature, index: number) => {
+                const IconComponent = feature.icon === 'Zap' ? Zap : Shield;
+                return (
+                  <div key={index} className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/20 hover:bg-white/15 transition-all">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className={`p-1.5 bg-gradient-to-br ${feature.color} rounded-lg`}>
+                        <IconComponent size={20} className="text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-white">{feature.name}</h3>
+                        <p className="text-white/70 text-xs">{feature.description}</p>
+                      </div>
+                    </div>
+                    <div className="w-full bg-white/20 rounded-full h-1.5">
+                      <div className={`bg-gradient-to-r ${feature.color} h-1.5 rounded-full`} style={{width: feature.percentage}}></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col">
+             <div className="flex items-center mb-4 flex-shrink-0">
+               <Globe size={16} className="text-purple-600 mr-2" />
+               <h3 className="text-sm font-bold text-gray-800">Market Intelligence</h3>
+             </div>
+             <div className="flex-1 overflow-y-auto min-h-0">
+               {renderContent()}
+             </div>
+           </div>
+        </div>
       </div>
     );
 
     const renderMarketingSales = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <TrendingUp size={48} className="text-pink-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Marketing & Sales Strategy</h1>
-          <p className="text-gray-600 mt-2">Customer Acquisition & Growth Strategy</p>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-pink-50 p-6 rounded-lg border-l-4 border-pink-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Marketing Strategy</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.marketingStrategy || 'Our comprehensive marketing strategy leverages digital channels, content marketing, and strategic partnerships to reach our target audience.'}
-            </p>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Sales Strategy</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.salesStrategy || 'Our sales approach combines direct sales, channel partnerships, and digital platforms to maximize market penetration and customer acquisition.'}
-            </p>
-          </div>
-
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Pricing Strategy</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.pricingStrategy || 'Our competitive pricing strategy balances value delivery with market positioning to ensure sustainable profitability and customer satisfaction.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Distribution Channels</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.distributionChannels || 'We utilize multiple distribution channels including direct sales, online platforms, and strategic partnerships to reach customers effectively.'}
-            </p>
-          </div>
-
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Promotion Strategy</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.promotionStrategy || 'Our promotional activities include digital marketing, industry events, thought leadership, and customer referral programs.'}
-            </p>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+        }}
+      >
+        {/* Marketing-themed background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-16 right-20 w-20 h-20 border-2 border-white/20 rounded-full"></div>
+          <div className="absolute bottom-24 left-16 w-16 h-16 bg-white/10 rounded-xl rotate-12"></div>
+          <div className="absolute top-1/3 left-1/3 w-14 h-14 bg-white/15 rounded-full"></div>
+          
+          {/* Target rings */}
+          <div className="absolute top-1/2 right-1/4 w-24 h-24">
+            <div className="absolute inset-0 border-2 border-white/20 rounded-full"></div>
+            <div className="absolute inset-3 border-2 border-white/30 rounded-full"></div>
+            <div className="absolute inset-6 border-2 border-white/40 rounded-full"></div>
           </div>
         </div>
 
-        {section.content?.marketingChannels && section.content.marketingChannels.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Marketing Channels</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {section.content.marketingChannels.map((channel: any, index: number) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-md border">
-                  <div className="text-lg font-bold text-gray-900">{channel.name}</div>
-                  <div className="text-2xl font-bold" style={{ color: channel.color }}>{channel.percentage}</div>
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/30">
+              <Target size={24} className="text-white" />
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
+            </div>
+            <p className="text-white/80 text-sm">Customer Acquisition & Growth Strategy</p>
+          </div>
+
+          {/* Marketing channels */}
+          {section.content.marketingChannels && section.content.marketingChannels.length > 0 && (
+            <div className="grid grid-cols-4 gap-1.5 mb-3 flex-shrink-0">
+              {section.content.marketingChannels.map((channel: MarketingChannel) => (
+                <div key={channel.name} className="bg-white/20 backdrop-blur-md rounded-lg p-2 text-center border border-white/30 hover:bg-white/25 transition-all">
+                  <div className="text-lg mb-1">{channel.icon}</div>
+                  <div className="text-sm font-black text-white mb-1">{channel.percentage}</div>
+                  <div className="text-white/80 font-medium text-xs">{channel.name}</div>
+                  <div className="mt-1 w-full bg-white/20 rounded-full h-1.5">
+                    <div className={`bg-gradient-to-r ${channel.color} h-1.5 rounded-full`} style={{width: channel.percentage}}></div>
+                  </div>
                 </div>
               ))}
             </div>
+          )}
+
+          {/* Content */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col">
+            <div className="flex items-center mb-4 flex-shrink-0">
+              <Target size={16} className="text-cyan-600 mr-2" />
+              <h3 className="text-sm font-bold text-gray-800">Marketing Strategy</h3>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {renderContent()}
+            </div>
           </div>
-        )}
+        </div>
       </div>
     );
 
     const renderFinancialProjections = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <DollarSign size={48} className="text-yellow-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Financial Projections</h1>
-          <p className="text-gray-600 mt-2">5-Year Financial Roadmap</p>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)'
+        }}
+      >
+        {/* Financial-themed background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-16 w-16 h-16 border-2 border-white/20 rounded-lg rotate-45"></div>
+          <div className="absolute bottom-32 right-20 w-20 h-20 bg-white/10 rounded-full"></div>
+          <div className="absolute top-1/2 right-1/3 w-14 h-14 bg-white/15 rounded-xl rotate-12"></div>
+          
+          {/* Chart-like lines */}
+          <div className="absolute bottom-1/4 left-1/4 w-24 h-px bg-white/30"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-px h-12 bg-white/30"></div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Startup Costs</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.startupCosts || 'Initial investment requirements include technology development, market entry, team building, and operational setup costs.'}
-            </p>
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/30">
+              <BarChart3 size={24} className="text-white" />
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
+            </div>
+            <p className="text-white/80 text-sm">5-Year Financial Roadmap</p>
           </div>
 
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Sales Forecast</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.salesForecast || 'Our sales projections show steady growth based on market analysis, customer acquisition strategies, and product development milestones.'}
-            </p>
-          </div>
-
-          <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Expense Projections</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.expenseProjections || 'Operating expenses include personnel, technology, marketing, and administrative costs with careful attention to scalability and efficiency.'}
-            </p>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Break-Even Analysis</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.breakEvenAnalysis || 'Break-even analysis indicates the point at which revenues will cover all fixed and variable costs, projected within the first 18-24 months.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Funding Needs</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.fundingNeeds || 'Total funding requirements are calculated to support operations through profitability with appropriate reserves for growth opportunities.'}
-            </p>
-          </div>
-        </div>
-
-        {section.content?.financialMetrics && section.content.financialMetrics.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Financial Metrics</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {section.content.financialMetrics.map((metric: any, index: number) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-md border">
-                  <div className="text-lg font-bold text-gray-900">{metric.label}</div>
-                  <div className="text-2xl font-bold" style={{ color: metric.color }}>{metric.value}</div>
-                  <p className="text-sm text-gray-600">{metric.description}</p>
+          {/* Key metrics */}
+          {section.content.financialMetrics && section.content.financialMetrics.length > 0 && (
+            <div className="grid grid-cols-3 gap-2 mb-3 flex-shrink-0">
+              {section.content.financialMetrics.map((metric: FinancialMetric, index: number) => (
+                <div key={index} className="bg-white/20 backdrop-blur-md rounded-xl p-3 text-center border border-white/30">
+                  <div className="text-xl font-black text-white mb-1">{metric.value}</div>
+                  <div className="text-white/80 font-medium text-xs">{metric.label}</div>
+                  {metric.percentage && (
+                    <div className="mt-1 w-full bg-white/20 rounded-full h-1.5">
+                      <div className={`bg-gradient-to-r ${metric.color} h-1.5 rounded-full`} style={{width: metric.percentage}}></div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
+          )}
+
+          {/* Revenue projection */}
+          {(section.content.projectedRevenue || section.content.revenueTimeline) && (
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 mb-3 border border-white/20 flex-shrink-0">
+              <div className="text-center mb-2">
+                <h3 className="text-sm font-bold text-white mb-1">Projected Revenue Growth</h3>
+                {section.content.projectedRevenue && (
+                  <div className="text-xl font-black text-white">{section.content.projectedRevenue}</div>
+                )}
+                {section.content.revenueTimeline && (
+                  <p className="text-white/70 text-xs">{section.content.revenueTimeline}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col">
+            <div className="flex items-center mb-4 flex-shrink-0">
+              <BarChart3 size={16} className="text-purple-600 mr-2" />
+              <h3 className="text-sm font-bold text-gray-800">Financial Analysis</h3>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {renderContent()}
+            </div>
           </div>
-        )}
+        </div>
       </div>
     );
 
     const renderFundingRequest = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <DollarSign size={48} className="text-red-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Funding Request</h1>
-          <p className="text-gray-600 mt-2">Investment Opportunity & Capital Requirements</p>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+        }}
+      >
+        {/* Money-themed background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-16 left-20 w-20 h-20 bg-white/10 rounded-full"></div>
+          <div className="absolute bottom-24 right-16 w-16 h-16 border-2 border-white/20 rounded-xl rotate-45"></div>
+          <div className="absolute top-1/3 right-1/4 w-14 h-14 bg-white/15 rounded-full"></div>
+          
+          {/* Dollar signs */}
+          <div className="absolute top-1/4 left-1/3 text-4xl text-white/10 font-black">$</div>
+          <div className="absolute bottom-1/3 right-1/3 text-3xl text-white/10 font-black">$</div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Current Funding Needs</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.currentFundingNeeds || 'We are seeking initial funding to accelerate product development, market entry, and team expansion to capture market opportunities.'}
-            </p>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Future Funding Needs</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.futureFundingNeeds || 'Future funding rounds will support scaling operations, international expansion, and additional product development initiatives.'}
-            </p>
-          </div>
-
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Use of Funds</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.useOfFunds || 'Investment funds will be allocated across product development, marketing, team expansion, and operational infrastructure to ensure sustainable growth.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Strategic Financial Situation</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.strategicFinancialSituation || 'Our financial strategy focuses on achieving profitability while maintaining growth momentum and building long-term shareholder value.'}
-            </p>
-          </div>
-
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Exit Strategy</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.exitStrategy || 'Potential exit strategies include strategic acquisition by industry leaders or public offering, providing attractive returns for investors.'}
-            </p>
-          </div>
-        </div>
-
-        {section.content?.fundingAllocation && section.content.fundingAllocation.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Funding Allocation</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {section.content.fundingAllocation.map((allocation: any, index: number) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-md border">
-                  <div className="text-lg font-bold text-gray-900">{allocation.category}</div>
-                  <div className="text-2xl font-bold" style={{ color: allocation.color }}>{allocation.amount}</div>
-                  <div className="text-sm text-gray-600">{allocation.percentage}</div>
-                </div>
-              ))}
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/30">
+              <DollarSign size={24} className="text-white" />
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
             </div>
+            <p className="text-white/80 text-sm">Investment Opportunity & Capital Requirements</p>
           </div>
-        )}
+
+          {/* Funding breakdown */}
+          {section.content.fundingAllocation && section.content.fundingAllocation.length > 0 && (
+            <div className="bg-white/20 backdrop-blur-md rounded-xl p-3 mb-3 border border-white/30 flex-shrink-0">
+              <h3 className="text-sm font-bold text-white text-center mb-3">Funding Allocation</h3>
+              
+              <div className="grid grid-cols-2 gap-2">
+                {section.content.fundingAllocation.map((item: FundingAllocation) => (
+                  <div key={item.category} className="bg-white/90 rounded-lg p-3 shadow-md hover:shadow-lg transition-all">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-1.5">
+                        <span className="text-sm">{item.icon}</span>
+                        <span className="font-bold text-gray-800 text-xs break-words">{item.category}</span>
+                      </div>
+                      <span className="text-sm font-black text-green-600">{item.amount}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div 
+                        className={`bg-gradient-to-r ${item.color} h-1.5 rounded-full transition-all duration-1000`}
+                        style={{ width: item.percentage }}
+                      ></div>
+                    </div>
+                    <div className="text-right mt-0.5">
+                      <span className="text-xs font-semibold text-gray-600">{item.percentage}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Content */}
+      
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col">
+             <div className="flex items-center mb-4 flex-shrink-0">
+               <Globe size={16} className="text-green-600 mr-2" />
+               <h3 className="text-sm font-bold text-gray-800">Market Intelligence</h3>
+             </div>
+             <div className="flex-1 overflow-y-auto min-h-0">
+               {renderContent()}
+             </div>
+           </div>
+        </div>
       </div>
     );
 
     const renderAppendix = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <FileText size={48} className="text-gray-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Appendix</h1>
-          <p className="text-gray-600 mt-2">Supporting Documents & Additional Information</p>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        }}
+      >
+        {/* Document-themed background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 right-24 w-16 h-20 bg-white/10 rounded-lg"></div>
+          <div className="absolute bottom-32 left-20 w-18 h-24 bg-white/5 rounded-lg rotate-12"></div>
+          <div className="absolute top-1/2 left-1/3 w-14 h-16 bg-white/15 rounded-lg rotate-6"></div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Resumes</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.resumes || 'Detailed resumes of key team members and advisors highlighting relevant experience and qualifications.'}
-            </p>
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/30">
+              <FileText size={24} className="text-white" />
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
+            </div>
+            <p className="text-white/80 text-sm">Supporting Documents & Additional Information</p>
           </div>
 
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Permits & Licenses</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.permits || 'All necessary business permits, licenses, and regulatory approvals required for operations.'}
-            </p>
-          </div>
 
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Legal Documents</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.legalDocuments || 'Corporate formation documents, partnership agreements, and intellectual property filings.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Market Research</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.marketResearch || 'Comprehensive market research data, customer surveys, and competitive analysis reports.'}
-            </p>
-          </div>
-
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Additional Information</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.additionalInfo || 'Supplementary materials including product specifications, technical documentation, and reference materials.'}
-            </p>
-          </div>
+          {/* Content */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col">
+             <div className="flex items-center mb-4 flex-shrink-0">
+               <FileText size={16} className="text-purple-600 mr-2" />
+               <h3 className="text-sm font-bold text-gray-800">Supporting Documents</h3>
+             </div>
+             <div className="flex-1 overflow-y-auto min-h-0">
+               {renderContent()}
+             </div>
+           </div>
         </div>
       </div>
     );
 
     const renderGovernmentPolicy = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <Shield size={48} className="text-blue-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Government Policy</h1>
-          <p className="text-gray-600 mt-2">Regulatory Environment & Compliance</p>
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+        }}
+      >
+        {/* Government-themed background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-16 left-16 w-20 h-20 bg-white/10 rounded-full"></div>
+          <div className="absolute bottom-24 right-20 w-16 h-16 border-2 border-white/20 rounded-lg rotate-45"></div>
+          <div className="absolute top-1/3 right-1/4 w-14 h-14 bg-white/15 rounded-xl rotate-12"></div>
+          
+          {/* Government building silhouette */}
+          <div className="absolute bottom-1/4 left-1/4 w-24 h-16 bg-white/10 rounded-t-lg"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-4 h-20 bg-white/15"></div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Industry Regulations</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.industryRegulations || 'Overview of key industry regulations that impact our business operations and strategic planning.'}
-            </p>
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/30">
+              <Award size={24} className="text-white" />
+              <h1 className="text-lg font-black text-white">{section.title}</h1>
+            </div>
+            <p className="text-white/80 text-sm">Regulatory Environment & Compliance</p>
           </div>
 
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Compliance Requirements</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.complianceRequirements || 'Detailed compliance framework ensuring adherence to all applicable laws and regulations.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Licensing Requirements</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.licensingRequirements || 'Required licenses and permits for business operations with timeline for acquisition and renewal.'}
-            </p>
-          </div>
-
-          <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Policy Changes</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.policyChanges || 'Analysis of recent and anticipated policy changes that may impact business operations and strategy.'}
-            </p>
-          </div>
-
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Tax Incentives</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.taxIncentives || 'Available tax incentives and benefits that support business growth and investment in our sector.'}
-            </p>
+          {/* Content */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col">
+            <div className="flex items-center mb-4 flex-shrink-0">
+              <Award size={16} className="text-pink-600 mr-2" />
+              <h3 className="text-sm font-bold text-gray-800">Government Regulations</h3>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {renderContent()}
+            </div>
           </div>
         </div>
       </div>
     );
 
     const renderNGOLandscape = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <Heart size={48} className="text-green-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">NGO Landscape</h1>
-          <p className="text-gray-600 mt-2">Partnership Opportunities & Resources</p>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Relevant NGOs</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.relevantNGOs || 'Identification of NGOs and non-profit organizations aligned with our mission and values for potential collaboration.'}
-            </p>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Potential Partnerships</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.potentialPartnerships || 'Strategic partnership opportunities with NGOs that can enhance our social impact and market reach.'}
-            </p>
-          </div>
-
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Resources Offered</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.resourcesOffered || 'Resources and support services available through NGO partnerships including funding, expertise, and network access.'}
-            </p>
-          </div>
-
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact Information</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.contactInformation || 'Key contact information for relevant NGOs and partnership coordinators for future collaboration.'}
-            </p>
-          </div>
-
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Success Stories</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.successStories || 'Examples of successful business-NGO partnerships that demonstrate mutual benefit and social impact.'}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-
-    const renderGrants = () => (
-      <div className="h-full p-8">
-        <div className="text-center mb-8">
-          <Gift size={48} className="text-purple-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 page-title">Grants & Funding</h1>
-          <p className="text-gray-600 mt-2">Available Grants & Application Strategy</p>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Government Grants</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.governmentGrants || 'Available government grants and funding programs that align with our business objectives and eligibility criteria.'}
-            </p>
-          </div>
-
-          <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">NGO Grants</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.ngoGrants || 'Grant opportunities from NGOs and foundations that support businesses with social impact and community benefit.'}
-            </p>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Eligibility Criteria</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.eligibilityCriteria || 'Detailed eligibility requirements for various grant programs and our qualification status for each opportunity.'}
-            </p>
-          </div>
-
-          <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Application Process</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.applicationProcess || 'Step-by-step application process for grant programs including required documentation and submission procedures.'}
-            </p>
-          </div>
-
-          <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Application Deadlines</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.applicationDeadlines || 'Important deadlines for grant applications and funding cycles to ensure timely submission and consideration.'}
-            </p>
-          </div>
-
-          <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Grant Acquisition Strategy</h3>
-            <p className="text-gray-700 leading-relaxed">
-              {section.content?.grantAcquisitionStrategy || 'Strategic approach to grant acquisition including prioritization, application timeline, and success metrics.'}
-            </p>
-          </div>
-        </div>
-
-        {section.content?.fundingStats && section.content.fundingStats.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Funding Statistics</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {section.content.fundingStats.map((stat: any, index: number) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-md border text-center">
-                  <div className="text-2xl font-bold text-purple-600">{stat.value}</div>
-                  <div className="text-sm text-gray-600">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-
-    return (
       <div 
-        ref={ref}
-        className="w-full h-full bg-white border border-gray-200 shadow-lg overflow-hidden"
+        className="relative"
         style={{
-          width: '140mm',
-          height: '198mm',
-          minWidth: '140mm',
-          maxWidth: '140mm',
-          minHeight: '198mm',
-          maxHeight: '198mm'
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
         }}
       >
-        {renderPageContent()}
-        
-        {/* Page Footer */}
-        <div className="absolute bottom-4 right-4 text-xs text-gray-400">
-          Page {pageNumber} of {totalPages}
+        {/* NGO-themed background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 right-20 w-18 h-18 bg-white/15 rounded-full"></div>
+          <div className="absolute bottom-32 left-16 w-16 h-16 bg-white/10 rounded-xl rotate-12"></div>
+          <div className="absolute top-1/2 left-1/3 w-12 h-12 bg-white/20 rounded-full"></div>
+          
+          {/* Heart shapes for NGO theme */}
+          <div className="absolute top-1/4 right-1/3 text-3xl text-white/10">♥</div>
+          <div className="absolute bottom-1/3 left-1/4 text-2xl text-white/15">♥</div>
+        </div>
+
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/30 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/40">
+              <Heart size={24} className="text-pink-600" />
+              <h1 className="text-lg font-black text-gray-800">{section.title}</h1>
+            </div>
+            <p className="text-gray-700 text-sm font-medium">Partnership Opportunities & Resources</p>
+          </div>
+
+          {/* Content */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col border border-white/50">
+            <div className="flex items-center mb-4 flex-shrink-0">
+              <Users size={16} className="text-teal-600 mr-2" />
+              <h3 className="text-sm font-bold text-gray-800">NGO Partnerships</h3>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {renderContent()}
+            </div>
+          </div>
         </div>
       </div>
     );
+
+    const renderGrantsFunding = () => (
+      <div 
+        className="relative"
+        style={{
+          height: '100%',
+          width: '100%',
+          background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)'
+        }}
+      >
+        {/* Grants-themed background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-16 left-20 w-20 h-20 bg-white/15 rounded-full"></div>
+          <div className="absolute bottom-24 right-16 w-16 h-16 border-2 border-white/25 rounded-xl rotate-45"></div>
+          <div className="absolute top-1/2 right-1/4 w-14 h-14 bg-white/20 rounded-lg rotate-12"></div>
+          
+          {/* Money/grant symbols */}
+          <div className="absolute top-1/4 left-1/3 text-4xl text-white/15 font-black">$</div>
+          <div className="absolute bottom-1/3 right-1/3 text-3xl text-white/20 font-black">€</div>
+        </div>
+
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="text-center mb-4 flex-shrink-0">
+            <div className="inline-flex items-center space-x-2 bg-white/30 backdrop-blur-md px-4 py-2 rounded-full mb-3 shadow-lg border border-white/40">
+              <DollarSign size={24} className="text-orange-600" />
+              <h1 className="text-lg font-black text-gray-800">{section.title}</h1>
+            </div>
+            <p className="text-gray-700 text-sm font-medium">Available Grants & Application Strategy</p>
+          </div>
+
+          {/* Funding stats */}
+          {section.content.fundingStats && section.content.fundingStats.length > 0 && (
+            <div className="grid grid-cols-3 gap-2 mb-3 flex-shrink-0">
+              {section.content.fundingStats.map((stat: StatsCard, index: number) => {
+                const textColors = {
+                  orange: 'text-orange-600',
+                  green: 'text-green-600',
+                  blue: 'text-blue-600',
+                  purple: 'text-purple-600',
+                  red: 'text-red-600',
+                  yellow: 'text-yellow-600'
+                };
+                return (
+                  <div key={index} className="bg-white/40 backdrop-blur-md rounded-lg p-2 text-center border border-white/50">
+                    <div className={`text-lg font-black ${textColors[stat.color as keyof typeof textColors] || 'text-gray-600'}`}>{stat.value}</div>
+                    <div className="text-xs text-gray-700 font-medium">{stat.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg min-h-0 flex flex-col border border-white/50">
+            <div className="flex items-center mb-4 flex-shrink-0">
+              <Rocket size={16} className="text-orange-600 mr-2" />
+              <h3 className="text-sm font-bold text-gray-800">Funding Opportunities</h3>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {renderContent()}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+    const renderContent = () => {
+      if (section.contentType === 'structured' && typeof section.content === 'object') {
+        const contentObj = section.content as Record<string, string>;
+        
+        // Get the page keys to identify structured data fields
+        const pageKeys = getPageKeys();
+        const currentPageKeys = Object.values(pageKeys).flat();
+        
+        // Define structured data keys that should not be rendered as text
+        const structuredDataKeys = [
+          'statsCards', 'marketSegments', 'stakeholders', 'productFeatures', 
+          'marketingChannels', 'financialMetrics', 'fundingAllocation', 'fundingStats'
+        ];
+        
+        // Filter out structured data and only keep string/primitive values
+        const entries = Object.entries(contentObj).filter(([key, value]) => {
+          // Skip if it's a known structured data key
+          if (structuredDataKeys.includes(key)) {
+            return false;
+          }
+          // Skip if the value looks like JSON (starts with [ or {)
+          if (typeof value === 'string' && (value.trim().startsWith('[') || value.trim().startsWith('{'))) {
+            return false;
+          }
+          // Only include string values
+          return typeof value === 'string' && value.trim().length > 0;
+        });
+        
+        return (
+          <div className="space-y-3">
+            {entries.map(([key, value], index) => (
+              <div key={index} className="bg-gradient-to-r from-gray-50 to-white p-2 rounded-md border-l-2 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
+                <div>
+                  <h4 className="font-bold text-gray-900 mb-1 flex items-center text-xs">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full mr-1.5"></div>
+                    {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:
+                  </h4>
+                  <p className="text-xs leading-relaxed text-gray-700 ml-3">
+                    {value}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      }
+      
+      // Fallback for any legacy content
+      return (
+        <div className="text-xs leading-relaxed text-gray-700 whitespace-pre-line space-y-1">
+          {typeof section.content === 'string' ? section.content : JSON.stringify(section.content)}
+        </div>
+      );
+    };
+
+    const getPageLayout = () => {
+      switch (pageNumber) {
+        case 1: return renderCoverPage();
+        case 2: return renderTableOfContents();
+        case 3: return renderCompanyDescription();
+        case 4: return renderMarketAnalysis();
+        case 5: return renderOrganization();
+        case 6: return renderProductService();
+        case 7: return renderMarketingSales();
+        case 8: return renderFinancialProjections();
+        case 9: return renderFundingRequest();
+        case 10: return renderAppendix();
+        case 11: return renderGovernmentPolicy();
+        case 12: return renderNGOLandscape();
+        case 13: return renderGrantsFunding();
+        default: return renderCoverPage();
+      }
+    };
+
+    return (
+  <>
+    <div
+      ref={ref}
+      className="bg-white relative print:shadow-none overflow-visible"
+      style={{
+        width: '140mm',
+        height: '198mm',
+        minWidth: '140mm',
+        maxWidth: '140mm',
+        minHeight: '198mm',
+        maxHeight: '198mm',
+        margin: 0,
+        padding: '0',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        position: 'relative',
+        transform: 'scale(1)',
+        transformOrigin: 'top left',
+        zoom: '1',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          height: pageNumber === 1 ? '100%' : 'calc(100% - 36px)',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {getPageLayout()}
+      </div>
+
+      {pageNumber !== 1 && (
+        <div
+          className="absolute flex justify-between items-center text-xs text-gray-400 border-t border-gray-200 pt-1.5"
+          style={{
+            bottom: '8px',
+            left: '16px',
+            right: '16px',
+            height: '16px',
+          }}
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs font-bold">B</span>
+            </div>
+            <span className="text-xs">Business Plan</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-xs">Page {pageNumber} of {totalPages}</span>
+            <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+            <span className="text-xs">{new Date().getFullYear()}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  </>
+);
+
   }
 );
 
